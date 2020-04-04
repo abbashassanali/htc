@@ -10,7 +10,7 @@ import { firebaseConfig } from './firebaseConfig';
 import { PageWrapper } from './styles';
 
 const InputWrapper = styled.div`
-  width: 700px;
+  max-width: 700px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -22,13 +22,15 @@ const InputWrapper = styled.div`
 const PostWrapper = styled.div`
   display: flex;
   margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const Post = styled.div`
   border: 1px solid white;
-  max-width: 400px;
-  width: 200px;
-  margin: 0 8px;
+  max-width: 300px;
+  min-width: 300px;
+  margin: 8px;
 `;
 
 function Page() {
