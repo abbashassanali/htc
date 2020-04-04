@@ -40,7 +40,7 @@ function Page() {
   let db = useRef(null);
 
   useEffect(() => {
-    const app = firebase.initializeApp(firebaseConfig);
+    const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
     const posts = db.current.ref('have/');
     posts.on('value', function (snapshot) {
