@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 const GlobalStyles = createGlobalStyle`
   body {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #000 54px, #007 96px);
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
