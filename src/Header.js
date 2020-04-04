@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
-  height: 92px;
+  height: 72px;
   background-color: white;
   display: flex;
   padding-left: 20px;
