@@ -1,98 +1,129 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import shortid from 'shortid';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, MenuItem, Select, InputLabel } from '@material-ui/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import toArray from 'lodash/toArray';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAPQRD7Iipsy0OQUvCte5D3MgndhxFTO1U',
-  authDomain: 'htc20-b45ac.firebaseapp.com',
-  databaseURL: 'https://htc20-b45ac.firebaseio.com',
-  projectId: 'htc20-b45ac',
-  storageBucket: 'htc20-b45ac.appspot.com',
-  messagingSenderId: '281002133641',
-  appId: '1:281002133641:web:e8aedda99597cc8b105e58',
-  measurementId: 'G-JPGQ5ZQCN5',
-};
-
-const Wrapper = styled.div`
-  max-width: 700px;
-  margin: auto;
-  padding: 16px;
-`;
+import React, { useEffect, useState, useRef } from 'react';
+import shortid from 'shortid';
+import styled from 'styled-components';
+import { firebaseConfig } from './firebaseConfig';
+import { PageWrapper } from './styles';
 
 const InputWrapper = styled.div`
-  height: 250px;
+  width: 700px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   margin-top: 16px;
   justify-content: space-between;
+  margin: 0 auto;
 `;
 
-const DataWrapper = styled.div`
+const PostWrapper = styled.div`
+  display: flex;
   margin-top: 16px;
-`
+`;
 
-function App() {
+const Post = styled.div`
+  border: 1px solid white;
+  max-width: 400px;
+  width: 200px;
+  margin: 0 8px;
+`;
+
+function Page() {
+  const [material, setMaterial] = useState('');
+  const [location, setLocation] = useState('');
+  const [transport, setTransport] = useState('');
+  const [contact, setContact] = useState('');
+  const [posts, setPosts] = useState('');
   let db = useRef(null);
-  const [name, setName] = useState('');
-  const [stuff, setStuff] = useState('');
-  const [posts, setPosts] = useState({});
 
   useEffect(() => {
     const app = firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('test/');
+    const posts = db.current.ref('have/');
     posts.on('value', function (snapshot) {
       setPosts(toArray(snapshot.val()).reverse());
     });
   }, []);
 
   const onSubmit = () => {
-    if (name && stuff) {
-      const id = `test/${shortid.generate()}`;
+    if (material && location && transport && contact) {
+      const id = `have/${shortid.generate()}`;
       db.current.ref(id).set(
         {
-          name,
-          stuff,
+          material,
+          location,
+          transport,
+          contact,
         },
         (e) => console.log(e),
       );
     }
   };
   return (
-    <Wrapper>
+    <PageWrapper>
       <InputWrapper>
+        <h1>Jag har material</h1>
+        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+          Vilket material/produkt har jag
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={material}
+          onChange={({ target }) => setMaterial(target.value)}
+          displayEmpty
+        >
+          <MenuItem value="cat">Katt</MenuItem>
+          <MenuItem value="twoCats">Två katter</MenuItem>
+          <MenuItem value="threeCats">Tre katter</MenuItem>
+          <MenuItem value="dog">En hund 🙀</MenuItem>
+        </Select>
         <TextField
           variant="filled"
-          id="standard-basic"
-          label="Name"
-          value={name}
-          onChange={({ target }) => setName(target.value)}
+          id="multiline-basic"
+          label="Var finns materialet"
+          multiline
+          value={location}
+          onChange={({ target }) => setLocation(target.value)}
         />
         <TextField
           variant="filled"
           id="multiline-basic"
-          label="Stuff"
+          label="Kan vi transportera eller för upphämtning?"
           multiline
-          rows="2"
-          value={stuff}
-          onChange={({ target }) => setStuff(target.value)}
+          value={transport}
+          onChange={({ target }) => setTransport(target.value)}
+        />
+        <TextField
+          variant="filled"
+          id="multiline-basic"
+          label="Kontaktuppgifter"
+          multiline
+          value={contact}
+          onChange={({ target }) => setContact(target.value)}
         />
         <Button variant="contained" color="primary" onClick={onSubmit}>
           Skicka in!
         </Button>
       </InputWrapper>
-      <DataWrapper>
-        { posts.length && posts.map(({ name, stuff }) => {
-          return <p>{name} - {stuff}</p>
-        })}
-      </DataWrapper>
-    </Wrapper>
+      <PostWrapper>
+        {posts.length &&
+          posts.map(({ material, location, transport, contact }) => {
+            return (
+              <Post>
+                <p>{material}</p>
+                <p>{location}</p>
+                <p>{transport}</p>
+                <p>{contact}</p>
+              </Post>
+            );
+          })}
+      </PostWrapper>
+    </PageWrapper>
   );
 }
 
-export default App;
+export default Page;

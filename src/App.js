@@ -1,7 +1,9 @@
 import React from 'react';
-import Page from './Page';
-import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
+import Header from './Header';
+import IndexPage from './IndexPage';
+import Page from './Page';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -12,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #D1E0E3;
   }
 `;
 
@@ -20,9 +23,19 @@ function App() {
     <div className="App">
       <GlobalStyles />
       <Router>
+      <Header />
         <Switch>
-          <Route key="/" path="/">
+          <Route key="/have" path="/have">
             <Page />
+          </Route>
+          <Route key="/make" path="/make">
+            <Page />
+          </Route>
+          <Route key="/need" path="/need">
+            <Page />
+          </Route>
+          <Route key="/" path="/">
+            <IndexPage />
           </Route>
         </Switch>
       </Router>
