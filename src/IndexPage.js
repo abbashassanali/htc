@@ -17,17 +17,17 @@ const IndexPage = () => {
     <Wrapper>
       <Box m={1}>
         <Button variant="contained" color="primary" component={Link} to="/have">
-          Jag har material
+          I have material
         </Button>
       </Box>
       <Box m={1}>
-        <Button m={5} variant="contained" color="primary" component={Link} to="/have">
-          Jag kan tillverka
+        <Button m={5} variant="contained" color="primary" component={Link} to="/make">
+          I’m a maker
         </Button>
       </Box>
       <Box m={1}>
         <Button variant="contained" color="primary" component={Link} to="/have">
-          Jag behöver produkter
+          I need products
         </Button>
       </Box>
     </Wrapper>

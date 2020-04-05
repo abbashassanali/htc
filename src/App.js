@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import Header from './Header';
 import IndexPage from './IndexPage';
-import Page from './Page';
+import HavePage from './HavePage';
+import MakePage from './MakePage';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -26,13 +27,13 @@ function App() {
       <Header />
         <Switch>
           <Route key="/have" path="/have">
-            <Page />
+            <HavePage />
           </Route>
           <Route key="/make" path="/make">
-            <Page />
+            <MakePage />
           </Route>
           <Route key="/need" path="/need">
-            <Page />
+            <HavePage />
           </Route>
           <Route key="/" path="/">
             <IndexPage />

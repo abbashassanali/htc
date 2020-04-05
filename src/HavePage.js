@@ -5,35 +5,11 @@ import 'firebase/database';
 import toArray from 'lodash/toArray';
 import React, { useEffect, useRef, useState } from 'react';
 import shortid from 'shortid';
-import styled from 'styled-components';
 import { firebaseConfig } from './firebaseConfig';
-import { PageWrapper } from './styles';
+import { PageWrapper, InputWrapper, PostWrapper, Post } from './styles';
+import { products, materials } from './data';
 
-const InputWrapper = styled.div`
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 16px;
-  justify-content: space-between;
-  margin: 0 auto;
-`;
-
-const PostWrapper = styled.div`
-  display: flex;
-  margin-top: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const Post = styled.div`
-  border: 1px solid white;
-  max-width: 300px;
-  min-width: 300px;
-  margin: 8px;
-  padding: 8px;
-`;
-
-function Page() {
+function HavePage() {
   const [type, setType] = useState('');
   const [material, setMaterial] = useState('');
   const [contact, setContact] = useState('');
@@ -69,7 +45,7 @@ function Page() {
         <InputLabel shrink id="materialSelector">
           Material / Products
         </InputLabel>
-        <Select labelId="materialSelector" value={type} onChange={({ target }) => setType(target.value)} displayEmpty>
+        <Select labelId="materialSelector" value={type} onChange={({ target }) => setType(target.value)}>
           <MenuItem value="material">Material</MenuItem>
           <MenuItem value="products">Products</MenuItem>
         </Select>
@@ -86,7 +62,11 @@ function Page() {
               onChange={({ target }) => setMaterial(target.value)}
               displayEmpty
             >
-              <MenuItem value="plastic">Plastic</MenuItem>
+              {materials.map(({ id, display }) => (
+                <MenuItem id={id} value={id}>
+                  {display}
+                </MenuItem>
+              ))}
             </Select>
           </>
         )}
@@ -101,27 +81,30 @@ function Page() {
               onChange={({ target }) => setMaterial(target.value)}
               displayEmpty
             >
-              <MenuItem value="munskydd">Munskydd</MenuItem>
-              <MenuItem value="visir">Visir</MenuItem>
-              <MenuItem value="handsprit">Handsprit</MenuItem>
+              {products.map(({ id, display }) => (
+                <MenuItem id={id} value={id}>
+                  {display}
+                </MenuItem>
+              ))}
             </Select>
           </>
         )}
         <br />
-        {type && (
-          <TextField
-            variant="filled"
-            id="multiline-basic"
-            label="Kontaktuppgifter"
-            multiline
-            value={contact}
-            rows={4}
-            onChange={({ target }) => setContact(target.value)}
-          />
-        )}
+
+        <TextField
+          variant="filled"
+          id="multiline-basic"
+          label="Contact information"
+          multiline
+          value={contact}
+          rows={4}
+          required
+          onChange={({ target }) => setContact(target.value)}
+        />
         <br />
+
         <Button variant="contained" color="primary" onClick={onSubmit}>
-          Skicka in!
+          Submit
         </Button>
       </InputWrapper>
       <PostWrapper>
@@ -139,4 +122,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default HavePage;
