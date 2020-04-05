@@ -6,6 +6,7 @@ import IndexPage from './IndexPage';
 import HavePage from './HavePage';
 import MakePage from './MakePage';
 import NeedPage from './NeedPage';
+import InfoPage from './InfoPage';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -35,6 +36,9 @@ function App() {
           </Route>
           <Route key="/need" path="/need">
             <NeedPage />
+          </Route>
+          <Route key="/info" path="/info">
+            <InfoPage />
           </Route>
           <Route key="/" path="/">
             <IndexPage />

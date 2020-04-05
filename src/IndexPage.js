@@ -6,7 +6,7 @@ import { PageWrapper } from './styles';
 
 const Wrapper = styled(PageWrapper)`
   margin-top: 32px;
-  max-width: 700px;
+  max-width: 800px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -15,19 +15,24 @@ const Wrapper = styled(PageWrapper)`
 const IndexPage = () => {
   return (
     <Wrapper>
-      <Box m={1}>
+      <Box m={2.5}>
         <Button variant="contained" color="primary" component={Link} to="/have">
           I have material
         </Button>
       </Box>
-      <Box m={1}>
-        <Button m={5} variant="contained" color="primary" component={Link} to="/make">
+      <Box m={2.5}>
+        <Button variant="contained" color="primary" component={Link} to="/make">
           I’m a maker
         </Button>
       </Box>
-      <Box m={1}>
+      <Box m={2.5}>
         <Button variant="contained" color="primary" component={Link} to="/need">
           I need products
+        </Button>
+      </Box>
+      <Box m={2.5}>
+        <Button variant="contained" color="primary" component={Link} to="/info">
+          More information
         </Button>
       </Box>
     </Wrapper>
