@@ -1,19 +1,18 @@
-import { Button, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import { Button, InputLabel, MenuItem, Select } from '@material-ui/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import orderBy from 'lodash/orderBy';
 import toArray from 'lodash/toArray';
 import React, { useEffect, useRef, useState } from 'react';
 import shortid from 'shortid';
+import { materials, products } from './data';
 import { firebaseConfig } from './firebaseConfig';
-import { PageWrapper, InputWrapper, PostWrapper, Post } from './styles';
-import { products, materials } from './data';
-import orderBy from 'lodash/orderBy';
+import { InputWrapper, PageWrapper, Post, PostWrapper } from './styles';
 
 function MakePage() {
   const [product, setProduct] = useState('');
   const [material, setMaterial] = useState('');
-  const [contact, setContact] = useState('');
   const [posts, setPosts] = useState([]);
 
   let db = useRef(null);
@@ -21,22 +20,22 @@ function MakePage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('make2/');
+    const posts = db.current.ref('data/');
     posts.on('value', function (snapshot) {
       setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
   }, []);
 
   const onSubmit = () => {
-    if (product && material && contact) {
+    if (product && material) {
       const id = shortid.generate();
-      db.current.ref(`make2/${id}`).set(
+      db.current.ref(`data/${id}`).set(
         {
+          type: 'maker',
           id,
           createdAt: Date.now(),
           product,
           material,
-          contact,
         },
         (e) => console.log(e),
       );
@@ -46,7 +45,6 @@ function MakePage() {
     <PageWrapper>
       <InputWrapper>
         <h1>I’m a maker</h1>
-
         <InputLabel shrink id="materialSelector">
           What are you making?
         </InputLabel>
@@ -76,29 +74,16 @@ function MakePage() {
         </Select>
         <br />
 
-        <TextField
-          variant="filled"
-          id="multiline-basic"
-          label="Contact information"
-          multiline
-          value={contact}
-          rows={4}
-          required
-          onChange={({ target }) => setContact(target.value)}
-        />
-        <br />
-
         <Button variant="contained" color="primary" onClick={onSubmit}>
           Submit
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.map(({ id, product, material, contact }) => {
+        {posts.filter(({ type }) => type === 'maker').map(({ id, product, material }) => {
           return (
             <Post key={id}>
               <p><b>Making:</b> {products.find(({ id }) => id === product).display}</p>
               <p><b>Materials:</b> {materials.find(({ id }) => id === material).display}</p>
-              <p><b>Contact:</b> {contact}</p>
             </Post>
           );
         })}

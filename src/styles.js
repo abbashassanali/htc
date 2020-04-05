@@ -18,14 +18,19 @@ export const InputWrapper = styled.div`
 export const PostWrapper = styled.div`
   display: flex;
   margin-top: 32px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const Post = styled.div`
   background-color: #A3C4C9;
   box-shadow: 0.2px 1px 2px 0.2px #A3C4C9;
-  max-width: 300px;
-  min-width: 300px;
+  width: 100%;
+  max-width: 700px;
   margin: 8px;
   padding: 8px;
 `;
+
+export const Text = styled.p`
+  margin: 4px;
+`

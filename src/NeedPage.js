@@ -6,7 +6,7 @@ import toArray from 'lodash/toArray';
 import React, { useEffect, useRef, useState } from 'react';
 import shortid from 'shortid';
 import { firebaseConfig } from './firebaseConfig';
-import { PageWrapper, InputWrapper, PostWrapper, Post } from './styles';
+import { PageWrapper, InputWrapper, PostWrapper, Post, Text } from './styles';
 import { products } from './data';
 import orderBy from 'lodash/orderBy';
 
@@ -20,7 +20,7 @@ function NeedPage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('need2/');
+    const posts = db.current.ref('data/');
     posts.on('value', function (snapshot) {
       setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
@@ -29,8 +29,9 @@ function NeedPage() {
   const onSubmit = () => {
     if (product && contact) {
       const id = shortid.generate();
-      db.current.ref(`need2/${id}`).set(
+      db.current.ref(`data/${id}`).set(
         {
+          type: 'need',
           id,
           createdAt: Date.now(),
           product,
@@ -74,11 +75,22 @@ function NeedPage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.map(({ id, product, contact }) => {
+        {posts.filter(({ type }) => type === 'need').map(({ id, product, contact }) => {
           return (
             <Post key={id}>
-              <p><b>Product:</b> {products.find(({ id }) => id === product).display}</p>
-              <p><b>Contact:</b> {contact}</p>
+              <Text>Need:</Text>
+              <Text><b>Product:</b> {products.find(({ id }) => id === product).display}</Text>
+              <br/>
+              <Text>Avaliable:</Text>
+              {
+                posts.filter(({ type, product: haveProduct }) => (type === 'have' && product === haveProduct)).map(({ product, contact }) => (
+                  <>
+                  <Text><b>Product:</b> {products.find(({ id }) => id === product).display}</Text>
+                  <Text><b>Contact:</b> {contact}</Text>
+                  <br/>
+                  </>
+                ))
+              }
             </Post>
           );
         })}
