@@ -75,25 +75,33 @@ function NeedPage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.filter(({ type }) => type === 'need').map(({ id, product, contact }) => {
-          return (
-            <Post key={id}>
-              <Text>Need:</Text>
-              <Text><b>Product:</b> {products.find(({ id }) => id === product).display}</Text>
-              <br/>
-              <Text>Avaliable:</Text>
-              {
-                posts.filter(({ type, product: haveProduct }) => (type === 'have' && product === haveProduct)).map(({ product, contact }) => (
-                  <>
-                  <Text><b>Product:</b> {products.find(({ id }) => id === product).display}</Text>
-                  <Text><b>Contact:</b> {contact}</Text>
-                  <br/>
-                  </>
-                ))
-              }
-            </Post>
-          );
-        })}
+        {posts
+          .filter(({ type }) => type === 'need')
+          .map(({ id, product, contact }) => {
+            return (
+              <Post key={id}>
+                <Text>Need:</Text>
+                <Text>
+                  <b>Product:</b> {products.find(({ id }) => id === product).display}
+                </Text>
+                <br />
+                <Text>Avaliable:</Text>
+                {posts
+                  .filter(({ type, product: haveProduct }) => type === 'have' && product === haveProduct)
+                  .map(({ product, contact }) => (
+                    <>
+                      <Text>
+                        <b>Product:</b> {products.find(({ id }) => id === product).display}
+                      </Text>
+                      <Text>
+                        <b>Contact:</b> {contact}
+                      </Text>
+                      <br />
+                    </>
+                  ))}
+              </Post>
+            );
+          })}
       </PostWrapper>
     </PageWrapper>
   );

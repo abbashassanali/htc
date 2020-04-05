@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import shortid from 'shortid';
 import { materials, products } from './data';
 import { firebaseConfig } from './firebaseConfig';
-import { InputWrapper, PageWrapper, Post, PostWrapper } from './styles';
+import { InputWrapper, PageWrapper, Post, PostWrapper, Text } from './styles';
 
 function MakePage() {
   const [product, setProduct] = useState('');
@@ -79,14 +79,50 @@ function MakePage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.filter(({ type }) => type === 'maker').map(({ id, product, material }) => {
-          return (
-            <Post key={id}>
-              <p><b>Making:</b> {products.find(({ id }) => id === product).display}</p>
-              <p><b>Materials:</b> {materials.find(({ id }) => id === material).display}</p>
-            </Post>
-          );
-        })}
+        {posts
+          .filter(({ type }) => type === 'maker')
+          .map(({ id, product, material }) => {
+            return (
+              <Post key={id}>
+                <Text>Making</Text>
+                <Text>
+                  <b>Making:</b> {products.find(({ id }) => id === product).display}
+                </Text>
+                <Text>
+                  <b>Materials:</b> {materials.find(({ id }) => id === material).display}
+                </Text>
+                <br />
+                <Text>Material avaliable:</Text>
+                {posts
+                  .filter(({ type, material: haveMaterial }) => type === 'have' && material === haveMaterial)
+                  .map(({ material, contact }) => (
+                    <>
+                      <Text>
+                        <b>Material:</b> {materials.find(({ id }) => id === material).display}
+                      </Text>
+                      <Text>
+                        <b>Contact:</b> {contact}
+                      </Text>
+                      <br />
+                    </>
+                  ))}
+                <Text>Product needs:</Text>
+                {posts
+                  .filter(({ type, product: needProduct }) => type === 'need' && product === needProduct)
+                  .map(({ material, contact }) => (
+                    <>
+                      <Text>
+                        <b>Product:</b> {products.find(({ id }) => id === product).display}
+                      </Text>
+                      <Text>
+                        <b>Contact:</b> {contact}
+                      </Text>
+                      <br />
+                    </>
+                  ))}
+              </Post>
+            );
+          })}
       </PostWrapper>
     </PageWrapper>
   );
