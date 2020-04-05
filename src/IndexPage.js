@@ -26,7 +26,7 @@ const IndexPage = () => {
         </Button>
       </Box>
       <Box m={1}>
-        <Button variant="contained" color="primary" component={Link} to="/have">
+        <Button variant="contained" color="primary" component={Link} to="/need">
           I need products
         </Button>
       </Box>

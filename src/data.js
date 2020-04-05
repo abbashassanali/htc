@@ -1,6 +1,6 @@
 export const products = [
   { id: 'mouthguard', display: 'Mouthguard' },
-  { id: 'visir', display: 'Mask' },
+  { id: 'mask', display: 'Mask' },
   { id: 'handrub', display: 'Hand rub' },
 ];
 
