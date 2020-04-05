@@ -21,7 +21,7 @@ function HavePage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('data/');
+    const posts = db.current.ref('data0/');
     posts.on('value', function (snapshot) {
       setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
@@ -30,7 +30,7 @@ function HavePage() {
   const onSubmit = () => {
     if ((material || product) && contact) {
       const id = shortid.generate();
-      db.current.ref(`data/${id}`).set(
+      db.current.ref(`data0/${id}`).set(
         {
           type: 'have',
           id,
