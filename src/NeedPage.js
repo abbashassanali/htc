@@ -77,8 +77,8 @@ function NeedPage() {
         {posts.map(({ id, product, contact }) => {
           return (
             <Post key={id}>
-              <p>{product}</p>
-              <p>{contact}</p>
+              <p><b>Product:</b> {products.find(({ id }) => id === product).display}</p>
+              <p><b>Contact:</b> {contact}</p>
             </Post>
           );
         })}

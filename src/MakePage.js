@@ -28,7 +28,7 @@ function MakePage() {
   }, []);
 
   const onSubmit = () => {
-    if ((product || material) && contact) {
+    if (product && material && contact) {
       const id = shortid.generate();
       db.current.ref(`make2/${id}`).set(
         {
@@ -96,9 +96,9 @@ function MakePage() {
         {posts.map(({ id, product, material, contact }) => {
           return (
             <Post key={id}>
-              <p>{product}</p>
-              <p>{material}</p>
-              <p>{contact}</p>
+              <p><b>Making:</b> {products.find(({ id }) => id === product).display}</p>
+              <p><b>Materials:</b> {materials.find(({ id }) => id === material).display}</p>
+              <p><b>Contact:</b> {contact}</p>
             </Post>
           );
         })}

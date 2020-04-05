@@ -12,6 +12,7 @@ import { products, materials } from './data';
 
 function HavePage() {
   const [type, setType] = useState('');
+  const [product, setProduct] = useState('');
   const [material, setMaterial] = useState('');
   const [contact, setContact] = useState('');
   const [posts, setPosts] = useState([]);
@@ -20,20 +21,20 @@ function HavePage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('have3/');
+    const posts = db.current.ref('have5/');
     posts.on('value', function (snapshot) {
       setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
   }, []);
 
   const onSubmit = () => {
-    if (type && material && contact) {
+    if ((material || product) && contact) {
       const id = shortid.generate();
-      db.current.ref(`have3/${id}`).set(
+      db.current.ref(`have5/${id}`).set(
         {
           id,
-          type,
           material,
+          product,
           contact,
           createdAt: Date.now(),
         },
@@ -48,7 +49,12 @@ function HavePage() {
         <InputLabel shrink id="materialSelector">
           Material / Products
         </InputLabel>
-        <Select labelId="materialSelector" value={type} onChange={({ target }) => setType(target.value)}>
+        <Select labelId="materialSelector" value={type} onChange={({ target }) => {
+          setType(target.value);
+          setMaterial('')
+          setProduct('')
+        }}
+        >
           <MenuItem value="material">Material</MenuItem>
           <MenuItem value="products">Products</MenuItem>
         </Select>
@@ -80,8 +86,8 @@ function HavePage() {
             </InputLabel>
             <Select
               labelId="productTypeSelector"
-              value={material}
-              onChange={({ target }) => setMaterial(target.value)}
+              value={product}
+              onChange={({ target }) => setProduct(target.value)}
               displayEmpty
             >
               {products.map(({ id, display }) => (
@@ -111,12 +117,12 @@ function HavePage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.map(({ id, type, material, contact }) => {
+        {posts.map(({ id, material, product, contact }) => {
           return (
             <Post key={id}>
-              <p>{type}</p>
-              <p>{material}</p>
-              <p>{contact}</p>
+              { material && <p><b>Material:</b> {materials.find(({ id }) => id === material).display}</p>}
+              { product && <p><b>Product:</b> {products.find(({ id }) => id === product).display}</p>}
+              <p><b>Contact:</b> {contact}</p>
             </Post>
           );
         })}
