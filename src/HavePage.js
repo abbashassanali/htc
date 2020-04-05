@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import toArray from 'lodash/toArray';
+import orderBy from 'lodash/orderBy';
 import React, { useEffect, useRef, useState } from 'react';
 import shortid from 'shortid';
 import { firebaseConfig } from './firebaseConfig';
@@ -19,20 +20,22 @@ function HavePage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('have2/');
+    const posts = db.current.ref('have3/');
     posts.on('value', function (snapshot) {
-      setPosts(toArray(snapshot.val()).reverse());
+      setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
   }, []);
 
   const onSubmit = () => {
     if (type && material && contact) {
-      const id = `have2/${shortid.generate()}`;
-      db.current.ref(id).set(
+      const id = shortid.generate();
+      db.current.ref(`have3/${id}`).set(
         {
+          id,
           type,
           material,
           contact,
+          createdAt: Date.now(),
         },
         (e) => console.log(e),
       );
@@ -108,9 +111,9 @@ function HavePage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.map(({ type, material, contact }) => {
+        {posts.map(({ id, type, material, contact }) => {
           return (
-            <Post>
+            <Post key={id}>
               <p>{type}</p>
               <p>{material}</p>
               <p>{contact}</p>

@@ -8,6 +8,7 @@ import shortid from 'shortid';
 import { firebaseConfig } from './firebaseConfig';
 import { PageWrapper, InputWrapper, PostWrapper, Post } from './styles';
 import { products } from './data';
+import orderBy from 'lodash/orderBy';
 
 function NeedPage() {
   const [product, setProduct] = useState('');
@@ -19,17 +20,19 @@ function NeedPage() {
   useEffect(() => {
     const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(firebaseConfig);
     db.current = app.database();
-    const posts = db.current.ref('need/');
+    const posts = db.current.ref('need2/');
     posts.on('value', function (snapshot) {
-      setPosts(toArray(snapshot.val()).reverse());
+      setPosts(orderBy(toArray(snapshot.val()), 'createdAt', 'desc'));
     });
   }, []);
 
   const onSubmit = () => {
     if (product && contact) {
-      const id = `need/${shortid.generate()}`;
-      db.current.ref(id).set(
+      const id = shortid.generate();
+      db.current.ref(`need2/${id}`).set(
         {
+          id,
+          createdAt: Date.now(),
           product,
           contact,
         },
@@ -71,9 +74,9 @@ function NeedPage() {
         </Button>
       </InputWrapper>
       <PostWrapper>
-        {posts.map(({ product, contact }) => {
+        {posts.map(({ id, product, contact }) => {
           return (
-            <Post>
+            <Post key={id}>
               <p>{product}</p>
               <p>{contact}</p>
             </Post>
